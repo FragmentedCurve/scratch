@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <assert.h>
 
-#define _BITARRAY8
 #include "bitarray.h"
 
 int
@@ -35,7 +34,7 @@ main(int argc, char** argv)
 	assert(bitarray_get(a,  16) == 1);
 	assert(bitarray_get(a, 331) == 0);
 
-	printf("passed");
+	printf("passed\n");
 
 	return 0;
 }
