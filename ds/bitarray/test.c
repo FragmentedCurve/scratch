@@ -7,6 +7,13 @@
 int
 main(int argc, char** argv)
 {
+	assert(BITARRAY_LEN(0)   == 1);
+	assert(BITARRAY_LEN(1)   == 1);
+	assert(BITARRAY_LEN(8)   == 1);
+	assert(BITARRAY_LEN(16)  == 2);
+	assert(BITARRAY_LEN(129) == 17);
+	assert(BITARRAY_LEN(333) == 42);
+
 	bitarray_t a[BITARRAY_LEN(333)] = {0};
 
 	assert(bitarray_get(a,   0) == 0);
