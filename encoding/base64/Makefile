@@ -1,0 +1,33 @@
+CFLAGS= -O2 -Wall -Werror -Wno-unused-function -ggdb
+
+.if _BASE64_SWITCH
+CFLAGS+= -D _BASE64_SWITCH
+.elifdef _BASE64_IFELSE
+CFLAGS+= -D _BASE64_IFELSE
+.else
+CFLAGS+= -D _BASE64_TABLE
+.endif
+
+test: data.bin encode decode
+	./encode < data.bin | ./decode > out.bin
+	cmp data.bin out.bin
+
+data.bin:
+	dd if=/dev/random of=data.bin bs=1 count=1048576
+
+perform: perform.c
+	${CC} ${CFLAGS} -o perform perform.c
+
+encode: encode.c
+	${CC} ${CFLAGS} -o encode encode.c
+
+decode: decode.c
+	${CC} ${CFLAGS} -o decode decode.c
+
+validate: validate.c
+	${CC} ${CFLAGS} -o validate validate.c
+
+clean:
+	rm -f perform encode decode validate
+
+.PHONY: test clean
