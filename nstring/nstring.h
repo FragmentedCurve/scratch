@@ -1,3 +1,13 @@
+/*
+ * Warning: This code is considered incomplete. Use at your own risk.
+ *
+ * The purpose of this is to provide wrappers (and more) to the standard C library's string functions that don't use null-terminated strings.
+ *
+ * Potential TODOs:
+ *   - Support unicode and utf8 runes.
+ *   - 
+ */
+
 #ifndef _NSTRING_H_
 #define _NSTRING_H_
 
@@ -26,19 +36,8 @@ Slice(string s, size_t start, size_t end)
 {
 	return ((string){end - start, s.s + start});
 }
-
-ssize_t inline static
-Write(int fd, string s)
-{
-	return write(fd, s.s, s.length);
-}
-
-string inline static
-Read(int fd, char* dest, size_t dsize)
-{
-	ssize_t n = read(fd, dest, dsize);
-	return $$$(dest, n);
-}
+#define Prefix(s, index) Slice((s), 0, (index))
+#define Suffix(s, index) Slice((s), s.length - index, s.length)
 
 void inline static
 ToStrings(string* dest, char** strings, size_t n)
@@ -50,17 +49,23 @@ ToStrings(string* dest, char** strings, size_t n)
 int inline static
 Equals(string a, string b)
 {
-	if (a.length != b.length)
-		return 0;
-
-	return !strncmp(a.s, b.s, a.length);
+	return (a.length == b.length) && !strncmp(a.s, b.s, a.length);
 }
+#define Equals$(a, b) Equals($(a), b)
+
+int inline static
+HasPrefix(string prefix, string s)
+{
+	return Equals(prefix, Slice(s, 0, prefix.length));
+}
+#define HasPrefix$(p, s) HasPrefix($(p), s)
 
 int inline static
 Compare(string a, string b)
 {
 	return strncmp(a.s, b.s, a.length);
 }
+#define Compare$(a, b) Compare($(a), b)
 
 ssize_t inline static
 IndexOf(string haystack, char needle)
@@ -70,16 +75,15 @@ IndexOf(string haystack, char needle)
 			return i;
 	return -1;
 }
+#define IndexOf$(haystack, needle) IndexOf($(haystack), needle)
 
 string inline static
 Concat(char* buf, string x, string y)
 {
-	char* p = buf;
-	for (size_t i = 0; i < x.length; ++i)
-		*p++ = x.s[i];
-	for (size_t i = 0; i < y.length; ++i)
-		*p++ = y.s[i];
-	return StringN(buf, x.length + y.length);
+	memcpy(buf, x.s, x.length);
+	memcpy(buf + x.length, y.s, y.length);
+
+	return $$$(buf, x.length + y.length);
 }
 
 string inline static
@@ -88,9 +92,10 @@ Chomp(string s)
 	if (s.length == 0)
 		return s;
 
+	// TODO: This could be faster.
 	size_t i;
 	for (i = s.length - 1; s.s[i] == '\n' && i >= 0; --i);
-	return StringN(s.s, i + 1);
+	return $$$(s.s, i + 1);
 }
 
 string inline static
@@ -116,6 +121,13 @@ Itoa(size_t number, char buf[32], size_t len)
 	return $$$(buf+1, length);
 }
 
+int inline static
+Atoi()
+{
+	// TODO: Implement.
+	return 0;
+}
+
 size_t inline static
 Input(char* buf, size_t max)
 {
@@ -127,6 +139,10 @@ static void PrintFd(int fd, string fmt, ...);
 void inline static
 _Print(int fd, string fmt, va_list args)
 {
+	// TODO: Buffer this like libc does for printf. Switch to fwrite?
+
+	// TODO: Add more formating features.
+
 	size_t index = IndexOf(fmt, '%');
 	if (index == -1) {
 		write(fd, fmt.s, fmt.length);
@@ -180,7 +196,7 @@ _Print(int fd, string fmt, va_list args)
 	} break;
 	default: {
 		// Bug-free code should never reach this.
-		PrintFd(STDERR_FILENO, String("_Print: invalid formatter '%%%c'\n"), fmt.s[index]);
+		PrintFd(STDERR_FILENO, $("_Print: invalid formatter '%%%c'\n"), fmt.s[index]);
 		assert(0);
 	} break;
 	}
@@ -226,10 +242,12 @@ Println(string fmt, ...)
 	va_end(args);
 }
 
-#define Print$(fmt, ...) Print(String(fmt), ##__VA_ARGS__)
-#define Println$(fmt, ...) Println(String(fmt), ##__VA_ARGS__)
-#define PrintFd$(fd, fmt, ...) PrintFd(fd, String(fmt), ##__VA_ARGS__)
+#define Print$(fmt, ...) Print($(fmt), ##__VA_ARGS__)
+#define Println$(fmt, ...) Println($(fmt), ##__VA_ARGS__)
+#define PrintFd$(fd, fmt, ...) PrintFd(fd, $(fmt), ##__VA_ARGS__)
 
+#define PrintErr(fmt, ...) PrintFd(STDERR_FILENO, fmt, ##__VA_ARGS__)
+#define PrintErr(fmt, ...) PrintFd(STDERR_FILENO, $(fmt), ##__VA_ARGS__)
 
 /* Create a version of main called Main whose signature is Main(int, string*); */
 #define Main(c, v)						\
