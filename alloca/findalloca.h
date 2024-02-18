@@ -7,6 +7,7 @@
  */
 
 #ifndef _FINDALLOCA_H_
+#define _FINDALLOCA_H_
 
 #if defined(__GNUC__)
     /* https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html#index-_005f_005fbuiltin_005falloca */
