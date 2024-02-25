@@ -49,7 +49,7 @@ typedef struct {      \
 	T value;      \
 } T##_ok;
 
-/* Vanilla C types */
+// Vanilla C types
 TYPEDEF_OK(char);
 TYPEDEF_OK(short);
 TYPEDEF_OK(int);
@@ -57,7 +57,7 @@ TYPEDEF_OK(long);
 TYPEDEF_OK(float);
 TYPEDEF_OK(double);
 
-/* Non-vanilla types */
+// Non-vanilla types
 TYPEDEF_OK(i8);
 TYPEDEF_OK(u8);
 TYPEDEF_OK(i16);
@@ -72,8 +72,8 @@ TYPEDEF_OK(byte);
 TYPEDEF_OK(ubyte);
 TYPEDEF_OK(size);
 
-/* Helpers */
+// Helpers
 #define is_ok(ptr) (((char*)(ptr))[0] != 0)
 #define init_ok(v) {0, v}
 
-#endif /* _TYPEOK_H_ */
+#endif // _TYPEOK_H_
