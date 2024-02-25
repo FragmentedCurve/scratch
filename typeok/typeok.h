@@ -27,15 +27,16 @@
 #ifndef _TYPEOK_H_
 #define _TYPEOK_H_
 
-/* Warning: Compiler specific macros are used here */
-typedef __INT8_TYPE__         i8;
-typedef __UINT8_TYPE__        u8;
-typedef __INT16_TYPE__       i16;
-typedef __UINT16_TYPE__      u16;
-typedef __INT32_TYPE__       i32;
-typedef __UINT32_TYPE__      u32;
-typedef __INT64_TYPE__       i64;
-typedef __UINT64_TYPE__      u64;
+#include <stdint.h>
+
+typedef int8_t                i8;
+typedef uint8_t               u8;
+typedef int16_t              i16;
+typedef uint16_t             u16;
+typedef int32_t              i32;
+typedef uint32_t             u32;
+typedef int64_t              i64;
+typedef uint64_t             u64;
 typedef float                f32;
 typedef double               f64;
 typedef char                byte;
