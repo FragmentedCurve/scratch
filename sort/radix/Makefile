@@ -1,4 +1,4 @@
-CFLAGS=-O3 -Wall -Werror -std=c99
+CFLAGS=-O3 -Wall -Werror -std=c99 -pedantic -pedantic-errors
 
 radix.o: radix.c radix.h
 	$(CC) $(CFLAGS) -c radix.c
