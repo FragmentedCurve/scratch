@@ -8,9 +8,11 @@ CFLAGS+= -D _BASE64_IFELSE
 CFLAGS+= -D _BASE64_TABLE
 .endif
 
-test: data.bin encode decode
+test: validate perform data.bin encode decode
+	./validate
 	./encode < data.bin | ./decode > out.bin
 	cmp data.bin out.bin
+	./perform < data.bin
 
 data.bin:
 	dd if=/dev/random of=data.bin bs=1 count=1048576
