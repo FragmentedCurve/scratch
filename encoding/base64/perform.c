@@ -35,6 +35,8 @@ main(int argc, char** argv)
 		base64_encode(dst, src, n);
 	}
 	clock_t end = clock();
-	printf("ENCODING DATA WITH %s 1000 TIMES TOOK %d SECONDS.\n", version, (end - start) / CLOCKS_PER_SEC);
+
+	printf("ENCODING DATA WITH %s 1000 TIMES TOOK %ld SECONDS.\n", version, (end - start) / CLOCKS_PER_SEC);
+
 	return 0;
 }
