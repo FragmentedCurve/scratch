@@ -137,41 +137,43 @@ __base64_decode(unsigned char x)
 unsigned char static inline
 __base64_encode(unsigned char x)
 {
-	if (x >= 0 && x <= 25)
+	if (x >= 0 && x <= 25) {
 		return x + 'A';
-	else if (x >= 26 && x <= 51)
+	} else if (x >= 26 && x <= 51) {
 		return (x - 26) + 'a';
-	else if (x >= 52 && x <= 61)
+	} else if (x >= 52 && x <= 61) {
 		return (x - 52) + '0';
-	else if (x == 62)
+	} else if (x == 62) {
 		return '+';
-	else if (x == 63)
+	} else if (x == 63) {
 		return '/';
+	}
 	return __B64_INVALID;
 }
 
 unsigned char static inline
 __base64_decode(unsigned char x)
 {
-	if (x >= 'A' && x <= 'Z')
+	if (x >= 'A' && x <= 'Z') {
 		return x - 'A';
-	else if (x >= 'a' && x <= 'z')
+	} else if (x >= 'a' && x <= 'z') {
 		return (x + 26) - 'a';
-	else if (x >= '0' && x <= '9')
+	} else if (x >= '0' && x <= '9') {
 		return (x + 52) - '0';
-	else if (x == '+')
+	} else if (x == '+') {
 		return 62;
-	else if (x == '/')
+	} else if (x == '/') {
 		return 63;
-	else if (x == '=')
+	} else if (x == '=') {
 		return 0;
+	}
 	return __B64_INVALID;
 }
 #endif // _BASE64_IFELSE
 
 /*
- * Returns the exact length an encoded string will be, given the
- * decoded data is n bytes.
+  Returns the exact length an encoded string will be, given the
+  decoded data is n bytes.
  */
 size_t static inline
 base64_encoded_size(size_t n)
@@ -180,8 +182,8 @@ base64_encoded_size(size_t n)
 }
 
 /*
- * Returns the maximum length the decoded data may be, given the
- * encoded string is n bytes.
+  Returns the maximum length the decoded data may be, given the
+  encoded string is n bytes.
  */
 size_t static inline
 base64_decoded_size(size_t n)
@@ -190,12 +192,12 @@ base64_decoded_size(size_t n)
 }
 
 /*
- * Encode the data from _src which is n bytes long.
- *
- * Warning: This function assumes _dst is large enough to hold the
- * encoded data. See base64_encoded_size().
+  Encode the data from _src which is n bytes long.
+
+  Warning: This function assumes _dst is large enough to hold the
+           encoded data. See base64_encoded_size().
  */
-void static
+void static inline
 base64_encode(void* _dst, const void* _src, size_t n)
 {
 	unsigned char* dst = (unsigned char*) _dst;
@@ -226,12 +228,12 @@ base64_encode(void* _dst, const void* _src, size_t n)
 }
 
 /*
- * Decodes a data into _dst from an base64 encoded string in _src.
- *
- * Warning: This function assumes _dst is large enough to hold the
- * decoded data. See base64_decoded_size().
+  Decodes a data into _dst from an base64 encoded string in _src.
+
+  Warning: This function assumes _dst is large enough to hold the
+           decoded data. See base64_decoded_size().
  */
-size_t static
+size_t static inline
 base64_decode(void* _dst, const void* _src, size_t n)
 {
 	unsigned char* dst = (unsigned char*) _dst;
@@ -250,17 +252,22 @@ base64_decode(void* _dst, const void* _src, size_t n)
 
 
 /*
- * Checks if a string is a valid base64 encoding.
- * Returns 0 when valid and -1 whe invalid.
+  Checks if a string is a valid base64 encoding.
+  Returns 0 when valid and -1 whe invalid.
  */
-int static
+int static inline
 base64_valid(const char* s, size_t n)
 {
-	if (n % 4 != 0)
+	if (n % 4 != 0) {
 		return -1;
-	while (n)
-		if (__base64_decode(s[--n]) == __B64_INVALID)
+	}
+
+	while (n) {
+		if (__base64_decode(s[--n]) == __B64_INVALID) {
 			return -1;
+		}
+	}
+
 	return 0;
 }
 

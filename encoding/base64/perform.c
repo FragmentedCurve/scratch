@@ -24,16 +24,17 @@ main(int argc, char** argv)
 	unsigned char* dst = malloc(BUFSIZE * 2);
 
 	int m, n = 0;
-	while ((m = read(STDIN_FILENO, src + n, BUFSIZE - n)) > 0)
+	while ((m = read(STDIN_FILENO, src + n, BUFSIZE - n)) > 0) {
 		n += m;
-		
+	}
+
 	printf("READ %d BYTES\n", n);
 	
 	clock_t start = clock();
-	for (int i = 0; i < 1000; i++)
+	for (int i = 0; i < 1000; i++) {
 		base64_encode(dst, src, n);
+	}
 	clock_t end = clock();
-	//printf("%s\n", dst);
 	printf("ENCODING DATA WITH %s 1000 TIMES TOOK %d SECONDS.\n", version, (end - start) / CLOCKS_PER_SEC);
 	return 0;
 }
