@@ -1,29 +1,3 @@
-/*
-	TODO: Write a description of it's use.
-
-	Examples
-
-		int_ok safe_add(int a, int b) {
-			int_ok n = {1, a + b};
-
-			if (a > 0 && b > 0 && INT_MAX - a >= b) {
-				n.ok = 0;
-			}
-
-			if (a < 0 && b < 0 && INT_MIN - a >= b) {
-				n.ok = 0;
-			}
-
-			return n;
-		}
-
-		// ....
-
-		if (x = safe_add(INT_MAX, 1), !x.ok) {
-			printf("Integer overflow!");
-		}
- */
-
 #ifndef _TYPEOK_H_
 #define _TYPEOK_H_
 
@@ -47,7 +21,7 @@ typedef unsigned long long  size;
 typedef struct {      \
 	byte ok;      \
 	T value;      \
-} T##_ok;
+} T##_ok
 
 // Vanilla C types
 TYPEDEF_OK(char);
