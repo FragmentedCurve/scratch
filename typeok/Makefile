@@ -1,12 +1,10 @@
 .include "../config.mk"
 
-CFLAGS +=  -I.
-
-test: test.c typeok.h
+test: test.c typeok.h typeok_safe_math.h
 	${CC} ${CFLAGS} -o test test.c
 	./test
 
 clean:
 	rm -f test
 
-.PHONY:	clean
+.PHONY: run clean
