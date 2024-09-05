@@ -71,7 +71,10 @@ typeok_safe_muli(int a, int b)
 int_ok
 typeok_safe_divi(int a, int b)
 {
-	return (int_ok){b != 0, a / b};
+	return (int_ok){
+		b != 0,
+		a / (b + (b == 0))
+	};
 }
 
 uint_ok
@@ -101,7 +104,10 @@ typeok_safe_mulu(uint a, uint b)
 uint_ok
 typeok_safe_divu(uint a, uint b)
 {
-	return (uint_ok){b != 0, a / b};
+	return (uint_ok){
+		b != 0,
+		a / (b + (b == 0))
+	};
 }
 
 #endif // TYPEOK_SAFE_MATH_IMPLEMENTATION
