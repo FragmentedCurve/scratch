@@ -12,4 +12,5 @@ Various snippets of code with varying quality.
 | [[file:ds/]]       | Various data structures.                                    |
 | [[file:encoding/]] | Data encoders/decoders.                                     |
 | [[file:os/]]       | Various utility code for interacting with (POSIX) OSs.      |
+| [[file:sort/]]     | Sorting algorithms.                                         |
 | [[file:typeok/]]   | Single header library for bundling errors in return values. |
