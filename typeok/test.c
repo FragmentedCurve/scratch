@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <time.h>
 #include <assert.h>
 #include "typeok.h"
 #define TYPEOK_SAFE_MATH_IMPLEMENTATION
 #include "typeok_safe_math.h"
 
-void static
+void
 test_addi()
 {
 	int_ok n;
@@ -40,7 +41,7 @@ test_addi()
 	printf("passed.\n");
 }
 
-void static
+void
 test_subi()
 {
 	int_ok n;
@@ -81,7 +82,7 @@ test_subi()
 	printf("passed.\n");
 }
 
-void static
+void
 test_muli()
 {
 	int_ok n;
@@ -124,7 +125,7 @@ test_muli()
 	printf("passed.\n");
 }
 
-void static
+void
 test_divi()
 {
 	int_ok n;
@@ -149,7 +150,7 @@ test_divi()
 	printf("passed.\n");
 }
 
-void static
+void
 test_addu()
 {
 	uint_ok n;
@@ -171,8 +172,7 @@ test_addu()
 	printf("passed.\n");
 }
 
-
-void static
+void
 test_subu()
 {
 	uint_ok n;
@@ -200,7 +200,7 @@ test_subu()
 	printf("passed.\n");
 }
 
-void static
+void
 test_mulu()
 {
 	uint_ok n;
@@ -231,6 +231,59 @@ test_mulu()
 	printf("passed.\n");
 }
 
+void
+test_divu()
+{
+	uint_ok n;
+
+	printf("testing typeok_safe_divu\n");
+
+	n = typeok_safe_divu(0, 0);
+	assert(!n.ok);
+
+	n = typeok_safe_divu(1, 0);
+	assert(!n.ok);
+
+	n = typeok_safe_divu(1, 2);
+	assert(n.ok);
+
+	n = typeok_safe_divu(INT_MAX, INT_MAX);
+	assert(n.ok);
+
+	printf("passed.\n");
+}
+
+void
+perform()
+{
+	clock_t safe, unsafe;
+	const int n = 10000;
+
+	printf("performance test\n");
+
+	safe = clock();
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			if (!typeok_safe_addi(i, j).ok) {
+				printf("failed: %d + %d\n", i, j);
+			}
+		}
+	}
+	safe = clock() - safe;
+
+	unsafe = clock();
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			(void) (i + j);
+		}
+	}
+	unsafe = clock() - unsafe;
+
+	printf("safe add time:   %ld\n", safe);
+	printf("unsafe add time: %ld\n", unsafe);
+	printf("unsafe / safe: %f\n", (float)unsafe / (float)safe);
+}
+
 int
 main(int argc, char** argv)
 {
@@ -241,4 +294,5 @@ main(int argc, char** argv)
 	test_addu();
 	test_subu();
 	test_mulu();
+	perform();
 }
