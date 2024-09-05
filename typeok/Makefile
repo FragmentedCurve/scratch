@@ -1,6 +1,12 @@
-CFLAGS= -std=c99 -pedantic -pedantic-error
+.include "../config.mk"
+
+CFLAGS +=  -I.
 
 test: test.c typeok.h
-	$(CC) -o test test.c
+	${CC} ${CFLAGS} -o test test.c
+	./test
+
+clean:
+	rm -f test
 
 .PHONY:	clean

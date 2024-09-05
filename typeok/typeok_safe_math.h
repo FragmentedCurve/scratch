@@ -1,11 +1,36 @@
+/*
+ * Copyright (c) 2024 Paco Pascal <me@pacopascal.com>
+ *
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ */
+
 #ifndef _TYPEOK_SAFE_MATH_H_
 #define _TYPEOK_SAFE_MATH_H_
 
-int_ok   typeok_safe_addi(int a, int b);
-short_ok typeok_safe_adds(short a, short b);
-long_ok  typeok_safe_addl(long a, long b);
+#include <typeok.h>
+
+int_ok  typeok_safe_addi(int a, int b);
+int_ok  typeok_safe_subi(int a, int b);
+int_ok  typeok_safe_muli(int a, int b);
+int_ok  typeok_safe_divi(int a, int b);
+
+uint_ok typeok_safe_addu(uint a, uint b);
+uint_ok typeok_safe_subu(uint a, uint b);
+uint_ok typeok_safe_mulu(uint a, uint b);
+uint_ok typeok_safe_divu(uint a, uint b);
 
 #ifdef TYPEOK_SAFE_MATH_IMPLEMENTATION
+
 int_ok
 typeok_safe_addi(int a, int b)
 {
@@ -18,55 +43,66 @@ typeok_safe_addi(int a, int b)
 	};
 }
 
-short_ok
-typeok_safe_adds(short a, short b)
-{
-	return (short_ok){
-		   (a <= 0 && b >= 0)
-		|| (a >= 0 && b <= 0)
-		|| (a > 0 && SHRT_MAX - a >= b)  // overflow
-		|| (a < 0 && SHRT_MIN - a <= b), // underflow
-		a + b
-	};
-}
-
-long_ok
-typeok_safe_addl(long a, long b)
-{
-	return (long_ok){
-		   (a <= 0 && b >= 0)
-	        || (a >= 0 && b <= 0)
-		|| (a > 0 && LONG_MAX - a >= b)  // overflow
-		|| (a < 0 && LONG_MIN - a <= b), // underflow
-		a + b
-	};
-}
-
-/* TODO: Implement subtraction, multiplication, and division. */
-
 int_ok
 typeok_safe_subi(int a, int b)
 {
 	return (int_ok){
 		   (a <= 0 && b <= 0)
-	        || (a >= 0 && b >= 0)
-		|| (a > 0 && INT_MAX + a >= b)  // overflow
-		|| (a < 0 && INT_MIN + a <= b), // underflow
+		|| (a >= 0 && b >= 0)
+		|| (a > 0 && INT_MIN + a <= b)  // overflow
+		|| (a < 0 && INT_MAX + a >= b), // underflow
+		a - b
+	};
+}
+
+int_ok
+typeok_safe_muli(int a, int b)
+{
+	return (int_ok){
+		   (a >= 0  && a <= 1)
+		|| (b >= 0  && b <= 1)
+		|| (
+			   ((a == -1 && b > INT_MIN && b < INT_MAX) || (b == -1 && a > INT_MIN && a < INT_MAX))
+			&& (((a * b) / b == a) && ((a * b) / a == b))),
+		a * b
+	};
+}
+
+int_ok
+typeok_safe_divi(int a, int b)
+{
+	return (int_ok){b != 0, a / b};
+}
+
+uint_ok
+typeok_safe_addu(uint a, uint b)
+{
+	return (uint_ok){
+		a == 0 || b == 0 || (UINT_MAX - a >= b),  // overflow
 		a + b
 	};
 }
 
-short_ok
-typeok_safe_subs(short a, short b)
+uint_ok
+typeok_safe_subu(uint a, uint b)
 {
-	// TODO
+	return (uint_ok){a >= b, a - b};
 }
 
-long_ok
-typeok_safe_subl(long a, long b)
+uint_ok
+typeok_safe_mulu(uint a, uint b)
 {
-	// TODO
+	return (uint_ok){
+		a == 0 || b == 0 || a == 1 || b == 1 || (a * b) / b == a,
+		a * b
+	};
 }
+
+uint_ok
+typeok_safe_divu(uint a, uint b)
+{
+	return (uint_ok){b != 0, a / b};
+}
+
 #endif // TYPEOK_SAFE_MATH_IMPLEMENTATION
-
 #endif // _TYPEOK_SAFE_MATH_H_
