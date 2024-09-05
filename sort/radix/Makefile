@@ -1,10 +1,11 @@
-CFLAGS=-O3 -Wall -Werror -std=c99 -pedantic -pedantic-errors
+.include "../../config.mk"
 
-radix.o: radix.c radix.h
-	$(CC) $(CFLAGS) -c radix.c
+CHUNK_SIZE  = 8
+CHUNK_COUNT = 100000
 
-test: radix.o test.c
-	$(CC) $(CFLAGS) -o test test.c radix.o
+test: test.c radix.c radix.h
+	${CC} ${CFLAGS} -o test test.c radix.c
+	./test -m -s ${CHUNK_SIZE} -n ${CHUNK_COUNT}
 
 clean:
 	rm -f radix.o test

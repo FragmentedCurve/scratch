@@ -1,4 +1,4 @@
-CFLAGS= -O2 -Wall -Werror -Wno-unused-function -ggdb -std=c99 -pedantic -pedantic-errors
+.include "../../config.mk"
 
 .if _BASE64_SWITCH
 CFLAGS+= -D _BASE64_SWITCH
