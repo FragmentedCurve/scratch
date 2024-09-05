@@ -1,0 +1,15 @@
+#+TITLE: scratch
+#+AUTHOR: Paco Pascal
+#+OPTIONS: toc:nil num:nil
+
+Various snippets of code with varying quality.
+
+* index
+
+| folder         | desc                                                        |
+|----------------+-------------------------------------------------------------|
+| [[file:alloca/]]   | Header to automatically define =alloca=.                    |
+| [[file:ds/]]       | Various data structures.                                    |
+| [[file:encoding/]] | Data encoders/decoders.                                     |
+| [[file:os/]]       | Various utility code for interacting with (POSIX) OSs.      |
+| [[file:typeok/]]   | Single header library for bundling errors in return values. |
