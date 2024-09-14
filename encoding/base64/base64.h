@@ -266,7 +266,6 @@ base64_decode(void* _dst, const void* _src, size_t n)
 	return (3 * (n / 4)) - (src[n - 1] == '=') - (src[n - 2] == '=');
 }
 
-
 /*
   Checks if a string is a valid base64 encoding.
   Returns 0 when valid and -1 whe invalid.
@@ -274,12 +273,16 @@ base64_decode(void* _dst, const void* _src, size_t n)
 int static inline
 base64_valid(const char* s, size_t n)
 {
-	if (n % 4 != 0) {
+	// n % 4 != 0
+	if (n & 3) {
 		return -1;
 	}
 
-	while (n) {
-		if (__base64_decode(s[--n]) == __B64_INVALID) {
+	// The case 'xx=z' will be caught in the loop below.
+	n -= (s[n - 1] == '=') + (s[n - 2] == '=');
+
+	while (--n) {
+		if (__base64_decode(s[n]) == __B64_INVALID || s[n] == '=') {
 			return -1;
 		}
 	}
