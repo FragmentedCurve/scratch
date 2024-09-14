@@ -1,6 +1,8 @@
 .include "../../config.mk"
 
-.if _BASE64_SWITCH
+CFLAGS+= -O2
+
+.ifdef _BASE64_SWITCH
 CFLAGS+= -D _BASE64_SWITCH
 .elifdef _BASE64_IFELSE
 CFLAGS+= -D _BASE64_IFELSE
