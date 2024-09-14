@@ -23,6 +23,12 @@ main()
 	char buf[1024];
 	
 	for (size_t i = 0; i < sizeof(vectors) / sizeof(vectors[0]); ++i) {
+		size_t raw_len = strlen(vectors[i].raw);
+		size_t base64_len = strlen(vectors[i].base64);
+
+		printf("validating %s\n", vectors[i].base64);
+		assert(base64_valid(vectors[i].base64, base64_len));
+
 		printf("encoding %s\n", vectors[i].raw);
 		memset(buf, 0, sizeof(buf));
 		base64_encode(buf, vectors[i].raw, strlen(vectors[i].raw));
@@ -33,10 +39,11 @@ main()
 		base64_decode(buf, vectors[i].base64, strlen(vectors[i].base64));
 		assert(strcmp(buf, vectors[i].raw) == 0);
 
-		size_t raw_len = strlen(vectors[i].raw);
-		size_t base64_len = strlen(vectors[i].base64);
-		printf("decoded size is %zu, expected %zu\n", raw_len, base64_decoded_size(base64_len));
-		assert(raw_len <= base64_decoded_size(base64_len));
+		printf("decoded size is %zu, expected %zu\n", raw_len, base64_decoded_size(vectors[i].base64, base64_len));
+		assert(raw_len == base64_decoded_size(vectors[i].base64, base64_len));
+
+		printf("decoded size is %zu, expected %zu <= %zu\n", raw_len, raw_len, base64_decoded_max(base64_len));
+		assert(raw_len <= base64_decoded_size(vectors[i].base64, base64_len));
 
 		printf("encoded size is %zu, expected %zu\n", base64_len, base64_encoded_size(raw_len));
 		assert(base64_len == base64_encoded_size(raw_len));
