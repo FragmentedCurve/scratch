@@ -263,7 +263,7 @@ base64_decode(void* _dst, const void* _src, size_t n)
 	}
 
 	// Branchless checking for trailing '=' characters.
-	return (3 * (n / 4)) - (src[n - 1] == '=') - (src[n - 2] == '=');
+	return (3 * (n >> 2)) - (src[n - 1] == '=') - (src[n - 2] == '=');
 }
 
 /*
