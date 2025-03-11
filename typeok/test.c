@@ -3,12 +3,13 @@
 #include <limits.h>
 #include <time.h>
 #include <assert.h>
+#define TYPEOK_EXTRA
 #include "typeok.h"
 #define TYPEOK_SAFE_MATH_IMPLEMENTATION
 #include "typeok_safe_math.h"
 
 void
-test_addi()
+test_addi(void)
 {
 	int_ok n;
 
@@ -42,7 +43,7 @@ test_addi()
 }
 
 void
-test_subi()
+test_subi(void)
 {
 	int_ok n;
 
@@ -83,7 +84,7 @@ test_subi()
 }
 
 void
-test_muli()
+test_muli(void)
 {
 	int_ok n;
 
@@ -126,7 +127,7 @@ test_muli()
 }
 
 void
-test_divi()
+test_divi(void)
 {
 	int_ok n;
 
@@ -151,7 +152,7 @@ test_divi()
 }
 
 void
-test_addu()
+test_addu(void)
 {
 	uint_ok n;
 
@@ -173,7 +174,7 @@ test_addu()
 }
 
 void
-test_subu()
+test_subu(void)
 {
 	uint_ok n;
 
@@ -201,7 +202,7 @@ test_subu()
 }
 
 void
-test_mulu()
+test_mulu(void)
 {
 	uint_ok n;
 
@@ -232,7 +233,7 @@ test_mulu()
 }
 
 void
-test_divu()
+test_divu(void)
 {
 	uint_ok n;
 
@@ -254,7 +255,24 @@ test_divu()
 }
 
 void
-perform()
+test_extra(void)
+{
+	int a, b, c;
+
+	_ c;
+
+	printf("testing typeok extra\n");
+
+	a = KiloBytes(2);
+	assert(a == 2048);
+	b = -MegaBytes(1);
+	assert(b == -1024*1024);
+
+	printf("passed.\n");
+}
+
+void
+perform(void)
 {
 	clock_t safe, unsafe;
 	const int n = 10000;
@@ -279,8 +297,8 @@ perform()
 	}
 	unsafe = clock() - unsafe;
 
-	printf("safe add time:   %ld\n", safe);
-	printf("unsafe add time: %ld\n", unsafe);
+	printf("safe add time:   %d\n", safe);
+	printf("unsafe add time: %d\n", unsafe);
 	printf("unsafe / safe: %f\n", (float)unsafe / (float)safe);
 }
 
@@ -294,5 +312,6 @@ main(int argc, char** argv)
 	test_addu();
 	test_subu();
 	test_mulu();
+	test_extra();
 	perform();
 }
