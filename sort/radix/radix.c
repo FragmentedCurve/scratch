@@ -50,7 +50,7 @@ _radix_sort(
 			for (size_t i = 1; i < COUNT_LEN; i++)
 				counts[i] += counts[i - 1];
 		}
-		
+
 		{ // Move data into it's new position
 			for (size_t i = 0; i < chunk_count; i++) {
 				size_t ri = chunk_count - i - 1;
