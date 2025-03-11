@@ -18,10 +18,10 @@ struct {
 };
 
 int
-main()
+main(void)
 {
 	char buf[1024];
-	
+
 	for (size_t i = 0; i < sizeof(vectors) / sizeof(vectors[0]); ++i) {
 		size_t raw_len = strlen(vectors[i].raw);
 		size_t base64_len = strlen(vectors[i].base64);
@@ -49,6 +49,6 @@ main()
 		assert(base64_len == base64_encoded_size(raw_len));
 	}
 	printf("passed.\n");
-	
+
 	return 0;
 }

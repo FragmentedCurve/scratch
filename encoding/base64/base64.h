@@ -231,7 +231,7 @@ base64_encode(void* _dst, const void* _src, size_t n)
 {
 	unsigned char* dst = (unsigned char*) _dst;
 	const unsigned char* src = (const unsigned char*) _src;
-	
+
 	for (size_t i = 2; i < n; i += 3) {
 		*dst     = __base64_encode(0x3f & (src[i - 2] >> 2));
 		*(++dst) = __base64_encode(0x3f & ((src[i - 2] << 4) | (src[i - 1] >> 4)));
@@ -275,7 +275,7 @@ base64_decode(void* _dst, const void* _src, size_t n)
 		++dst;
 	}
 
-	return base64_decoded_size(src, n);
+	return base64_decoded_size((char*) _src, n);
 }
 
 /*

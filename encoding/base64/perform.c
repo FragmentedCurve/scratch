@@ -15,7 +15,9 @@ const char* version =
 	"_BASE64_TABLE";
 #endif
 
-#define BUFSIZE (1024 * 1024)
+#ifndef BUFSIZE
+#define BUFSIZE 1024*1024
+#endif
 
 int
 main(int argc, char** argv)
@@ -29,14 +31,14 @@ main(int argc, char** argv)
 	}
 
 	printf("READ %d BYTES\n", n);
-	
+
 	clock_t start = clock();
 	for (int i = 0; i < 1000; i++) {
 		base64_encode(dst, src, n);
 	}
 	clock_t end = clock();
 
-	printf("ENCODING DATA WITH %s 1000 TIMES TOOK %ld SECONDS.\n", version, (end - start) / CLOCKS_PER_SEC);
+	printf("ENCODING DATA WITH %s 1000 TIMES TOOK %d SECONDS.\n", version, (end - start) / CLOCKS_PER_SEC);
 
 	return 0;
 }
